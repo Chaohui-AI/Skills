@@ -59,7 +59,7 @@
 }
 ```
 
-### /model-avatar/data/list - 查询指定数字人的形象或声音列表
+### /model-avatar/data-list - 查询指定数字人的形象或声音列表
 
 ### 请求参数
 
