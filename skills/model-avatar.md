@@ -6,8 +6,17 @@
 
 ## 何时调用
 
-- 用户需要查询数字人时
-- 用户需要查询指定数字人的形象或声音时
+| 用户意图 | 用户示例 | 调用接口 |
+|----------|----------|----------|
+| 列出所有数字人 | "我有哪些数字人？"、"列出我的数字人" | `/model-avatar/list` |
+| 搜索数字人 | "有没有叫「张三」的数字人？"、"帮我找「李四」" | `/model-avatar/list`（带 searchTitle） |
+| 查询数字人形象 | "张三有哪些形象？"、"查看张三的形象列表" | `/model-avatar/data-list`（searchType=1） |
+| 查询数字人声音 | "张三有哪些声音？"、"查看张三的声音列表" | `/model-avatar/data-list`（searchType=2） |
+
+### 注意事项
+
+- 生成视频前必须先调用此能力获取 `modelCode`、`modelFigureId`、`modelVoiceId`
+- `searchType=1` 表示形象，`searchType=2` 表示声音
 
 ## 接口
 
@@ -17,17 +26,19 @@
 
 | 参数名 | 类型     | 必填 | 说明 |
 |--------|--------|------|------|
-| searchModelCodeOrTitle | string | 否 | 搜索指定模型编号或名称 |
+| searchTitle | string | 否 | 搜索关键词 |
 | page | number | 否 | 分页页数：默认 1 |
-| pageSize | number | 否 | 分页每页数量：默认 20 |
+| pageSize | number | 否 | 分页每页数量：默认 10 |
 
 ### 请求示例
 
 ```json
 {
-    "searchModelCodeOrTitle": "张三",
+    "api_name": "/model-avatar/list",
+    "searchTitle": "张三",
     "page": 1,
-    "pageSize": 20
+    "pageSize": 20,
+    "skill_version": "0.0.1"
 }
 ```
 
@@ -66,16 +77,22 @@
 | 参数名           | 类型     | 必填 | 说明   |
 |---------------|--------|------|------|
 | modelCode | string | 是 | 数字人编号 |
-| searchType | number | 是 | 搜索类型：0-全部，1-形象，2-声音 |
+| searchType | number | 是 | 搜索类型：1-形象，2-声音 |
 | searchTitle | string | 否 | 搜索形象或声音名称 |
+| page | number | 否 | 分页页数：默认 1 |
+| pageSize | number | 否 | 分页每页数量：默认 10 |
 
 ### 请求示例
 
 ```json
 {
+    "api_name": "/model-avatar/data-list",
     "modelCode": "AVATAR20260708001",
-    "searchType": 0,
-    "searchTitle": "室内"
+    "searchType": 1,
+    "searchTitle": "室内",
+    "page": 1,
+    "pageSize": 20,
+    "skill_version": "0.0.1"
 }
 ```
 

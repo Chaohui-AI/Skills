@@ -1,7 +1,7 @@
 ---
 name: Chaohui-AI-Skills
 description: 超会 AI 助手 — 创建数字人口播视频任务
-version: 0.0.1
+version: 0.1.0
 metadata:
     author: 超会 AI
     homepage: https://www.chaohui.ai

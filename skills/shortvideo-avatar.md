@@ -6,8 +6,32 @@
 
 ## 何时调用
 
-- 用户需要生成数字人视频
-- 用户提供了数字人形象和声音、脚本等必要信息
+| 用户意图 | 用户示例 | 调用接口 |
+|----------|----------|----------|
+| 生成视频 | "用张三生成一条视频，脚本是：大家好..."、"创建一条数字人视频" | `/shortvideo-avatar/create` |
+| 查询进度 | "视频生成好了没？"、"查一下 TASK20260708001 的状态" | `/shortvideo-avatar/detail` |
+
+### 工作流程
+
+```
+用户请求生成视频
+    ↓
+1. 调用 /model-avatar/list 查询数字人，获取 modelCode
+    ↓
+2. 调用 /model-avatar/data-list 查询形象和声音，获取 modelFigureId、modelVoiceId
+    ↓
+3. 调用 /shortvideo-avatar/create 创建任务，获取 taskCode
+    ↓
+4. 调用 /shortvideo-avatar/detail 查询进度，直到 status=2（成功）或 status=3（失败）
+    ↓
+5. 返回视频链接给用户
+```
+
+### 注意事项
+
+- 生成视频前必须先从「数字人管理」能力获取 `modelCode`、`modelFigureId`、`modelVoiceId`
+- 视频生成是异步任务，需要轮询 `/shortvideo-avatar/detail` 获取结果
+- `status=1` 表示生成中，`status=2` 表示成功，`status=3` 表示失败
 
 ## 接口
 
@@ -27,6 +51,7 @@
 
 ```json
 {
+    "api_name": "/shortvideo-avatar/create",
     "videos": [
         {
             "modelCode": "AVATAR001",
@@ -34,7 +59,8 @@
             "modelVoiceId": 1,           
             "script": "大家好，今天给大家介绍一款非常好用的产品。它采用了最新的技术，能够帮助您提升工作效率。"
         }
-    ]
+    ],
+    "skill_version": "0.0.1"
 }
 ```
 
@@ -72,7 +98,9 @@
 
 ```json
 {
-    "taskCode": "TASK20260708001"
+    "api_name": "/shortvideo-avatar/detail",
+    "taskCode": "TASK20260708001",
+    "skill_version": "0.0.1"
 }
 ```
 
